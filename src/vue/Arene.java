@@ -1,9 +1,9 @@
 package vue;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,15 +14,21 @@ import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
-public class Arene extends JFrame {
+import controleur.Controle;
+import controleur.Global;
+
+public class Arene extends JFrame implements Global{
 
 	private JPanel contentPane;
 	private JTextField textField;
-
+	private Controle controle;
 	/**
 	 * Create the frame.
 	 */
-	public Arene() {
+	public Arene(Controle unControle) {
+		this.controle = unControle;
+		this.getContentPane().setPreferredSize(new Dimension(803, 802));
+		this.pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 820, 829);
 		contentPane = new JPanel();
@@ -32,8 +38,7 @@ public class Arene extends JFrame {
 		/**
 		 * Création et application d'une image au label lblFond représentant l'arene
 		 */
-		String chemin = "fonds/fondarene.jpg";
-		URL resource = getClass().getClassLoader().getResource(chemin);
+		URL resource = getClass().getClassLoader().getResource(FONDARENE);
 		contentPane.setLayout(null);
 		JLabel lblFond = new JLabel("");
 		lblFond.setBounds(0, 0, 803, 627);

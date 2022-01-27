@@ -1,5 +1,5 @@
 package vue;
-
+import controleur.*;
 import java.awt.BorderLayout;
 
 import java.awt.EventQueue;
@@ -8,24 +8,32 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.net.*;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Closeable;
 import java.awt.Color;
-
-public class ChoixJoueur extends JFrame {
+import controleur.Controle;
+public class ChoixJoueur extends JFrame implements Global{
 
 	private JPanel contentPane;
 	private JTextField txtPseudo;
-	
+	private JLabel lblPersonnage;
+	private Controle controle;
+	private int numPersonnage;
 	/**
 	 * Create the frame.
 	 */
-	public ChoixJoueur() {
+	public ChoixJoueur(Controle unControle) {
+		this.controle = unControle;
+		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 415, 312);
@@ -35,13 +43,20 @@ public class ChoixJoueur extends JFrame {
 		contentPane.setLayout(null);
 		
 		/**
+		 * Création d'un label affichant le choix du Personnage
+		 */
+		lblPersonnage = new JLabel("");
+		lblPersonnage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPersonnage.setBounds(179, 142, 46, 61);
+		contentPane.add(lblPersonnage);
+		
+		/**
 		 * Création du lblFond servant de fond pour la fenetre ChoixJoueur
 		 */
 		JLabel lblFond = new JLabel("");
 		lblFond.setBounds(0, 0, 490, 275);
 		contentPane.add(lblFond);
-		String chemin = "fonds/fondchoix.jpg";
-		URL resourceChoix = getClass().getClassLoader().getResource(chemin);
+		URL resourceChoix = getClass().getClassLoader().getResource(FONDCHOIX);
 		lblFond.setIcon(new ImageIcon(resourceChoix));
 		
 		txtPseudo = new JTextField();
@@ -59,7 +74,21 @@ public class ChoixJoueur extends JFrame {
 		lblFlecheGauche.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Fleche de gauche");
+				if(numPersonnage == 1) {
+					numPersonnage = 3;
+				}
+				else {
+					numPersonnage--;
+				}
+				affichePerso();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sourisDoigt();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				sourisNormale();
 			}
 		});
 		lblFlecheGauche.setBounds(66, 142, 31, 48);
@@ -72,7 +101,21 @@ public class ChoixJoueur extends JFrame {
 		lblFlecheDroite.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Fleche de droite");
+				if(numPersonnage == 3) {
+					numPersonnage = 1;
+				}
+				else {
+					numPersonnage++;
+				}
+				affichePerso();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sourisDoigt();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				sourisNormale();
 			}
 		});
 		lblFlecheDroite.setBounds(300, 142, 31, 48);
@@ -85,11 +128,53 @@ public class ChoixJoueur extends JFrame {
 		lblGo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Go");
+				if(!txtPseudo.getText().equals("")) {
+					controle.evenementChoixJoueur(txtPseudo.getText(), numPersonnage);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "La saisie du pseudo est obligatoire");
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				sourisDoigt();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				sourisNormale();
 			}
 		});
 		lblGo.setBounds(310, 194, 67, 68);
-		contentPane.add(lblGo);
+		contentPane.add(lblGo);		
+		
+		this.numPersonnage = 1;
+		affichePerso();
+	}
+	
+	/**
+	 * Methode Affichant le personnage séléctionné
+	 */
+	private void affichePerso() {
+		String nomFichier = IMAGEPERSONNAGE + numPersonnage + "marche" + 1 + "d" + 1 +".gif";
+		URL resourcePerso = getClass().getClassLoader().getResource(nomFichier);
+		lblPersonnage.setIcon(new ImageIcon(resourcePerso));
+	}
+	
+	/**
+	 * Change le curseur en souris normale
+	 */
+	private void sourisNormale() {
+		contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+	
+	/**
+	 * Change le curseur en image de doigt
+	 */
+	private void sourisDoigt() {
+		contentPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+	
+	private void commencer() {
 		
 	}
 }

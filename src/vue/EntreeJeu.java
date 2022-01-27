@@ -2,7 +2,6 @@ package vue;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,16 +12,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import controleur.Controle;
 
 public class EntreeJeu extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtIpServer;
-
+	public Controle controle;
 	/**
 	 * Create the frame.
 	 */
-	public EntreeJeu() {
+	public EntreeJeu(Controle unControle) {
+		
+		this.controle = unControle;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 320, 160);
 		contentPane = new JPanel();
@@ -93,16 +96,14 @@ public class EntreeJeu extends JFrame {
 	 * Méthode ouvrant la fenetre Arene
 	 */
 	public void Start() {
-		Arene frmArene = new Arene();
-		frmArene.setVisible(true);
+		controle.evenementEntreeJeu("serveur");
 	}
 	
 	/**
 	 * Methode ouvrant la fenetre ChoixJoueur
 	 */
 	public void ChoixJoueur() {
-		ChoixJoueur frmChoixJoueur = new ChoixJoueur();
-		frmChoixJoueur.setVisible(true);
+		controle.evenementEntreeJeu(txtIpServer.getText());;
 	}
 }
 
